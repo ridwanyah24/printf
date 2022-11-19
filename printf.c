@@ -28,7 +28,7 @@ int _printf(const char *format, ...)
 			{
 				_putchar('%');
 				j++;
-			}else
+			} else
 			{
 				j += fn_pnt(ap);
 				i++;
