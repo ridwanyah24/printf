@@ -1,5 +1,6 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef _MAIN_H
+#define _MAIN_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -31,5 +32,7 @@ int print_binary(va_list);
 int print_dec_num(va_list);
 int print_int(va_list);
 int print_percent(va_list);
+int print_address(va_list);
+int print_HEXALL(long int, unsigned int, unsigned int);
 
 #endif

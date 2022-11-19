@@ -9,10 +9,13 @@
 int _printf(const char *format, ...)
 {
 	va_list list;
-	int i, j = 0;
-	int (*get_func)(va_list);
+	int i = 0, j = 0;
+	int (*list_func)(va_list);
 
-	if (get_func == NULL)
+	if (format == NULL || (format[i] == '%' && format[i + 1] == '\0'))
+		return (-1);
+
+	if (!format[i])
 		return (0);
 
 	va_start(list, format);
@@ -20,16 +23,16 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
-			get_func = get_func(format, i + 1);
+			list_func = get_func(format, i + 1);
 
-			if (get_func == NULL)
+			if (list_func == NULL)
 			{
 				_putchar('%');
 				j++;
 			}
 			else
 			{
-				j += get_func(list);
+				j += list_func(list);
 				i++;
 			}
 

@@ -4,7 +4,7 @@
  *print_int - print to an integer
  *@list: the lists of arguments
  *
- *Return: 1
+ *Return: d
  */
 int print_int(va_list list)
 {
@@ -33,9 +33,8 @@ int print_int(va_list list)
 		num /= 10;
 	}
 
-	for (m = j - 1; j > -1; j--, d++)
+	for (m = j - 1; m > -1; m--, d++)
 		_putchar(arr[m] + '0');
 
 	return (d);
-}
-		
+}		
