@@ -16,6 +16,6 @@ int print_str(va_list args)
 		{
 			_putchar(string[j]);
 		}
-		return (0);
 	}
+	return (0);
 }
