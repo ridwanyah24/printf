@@ -10,7 +10,7 @@ int _printf(const char *format, ...)
 {
 	va_list list;
 	int i, j = 0;
-	int (*get_func)(va_list);
+	int (*ptr_n)(va_list);
 
 	if (get_func == NULL)
 		return (0);
@@ -20,7 +20,7 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
-			get_func = get_func(format, i + 1);
+			ptr_n = get_func(format, i + 1);
 
 			if (get_func == NULL)
 			{
@@ -29,7 +29,7 @@ int _printf(const char *format, ...)
 			}
 			else
 			{
-				j += get_func(list);
+				j += ptr_n(list);
 				i++;
 			}
 
