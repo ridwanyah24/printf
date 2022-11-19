@@ -7,7 +7,7 @@
 int print_str(va_list args)
 {
 	char *string;
-	int j;
+	int j, i;
 	char null[] = "(null)";
 	string = va_arg(args, char *);
 
