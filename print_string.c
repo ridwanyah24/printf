@@ -9,7 +9,7 @@
 int print_string(va_list list)
 {
 	int i;
-	char u[] = "(nill)";
+	char u[] = "(null)";
 	char *string;
 	
 	string = va_arg(list, char *);
@@ -17,7 +17,7 @@ int print_string(va_list list)
 	{
 		for (i = 0; u[i] != '\0'; i++)
 			_putchar(u[i]);
-		return (2);
+		return (6);
 	}
 
 	for (i = 0; string[i] != '\0'; i++)
@@ -26,4 +26,3 @@ int print_string(va_list list)
 	}
 	return (i);
 }
-
