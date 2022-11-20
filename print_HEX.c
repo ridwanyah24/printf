@@ -17,7 +17,7 @@ int print_HEX(va_list list)
 		_putchar('0');
 		return (1);
 	}
-	for (r = 0; r != 0; r++)
+	for (r = 0; num != 0; r++)
 	{
 		hex[r] = num % 16;
 		num /= 	16;
@@ -29,7 +29,9 @@ int print_HEX(va_list list)
 			_putchar(hex[i] + '0');
 		}
 		else
-		_putchar((hex[i] % 10) + 'A');
+		{
+			_putchar((hex[i] % 10) + 'A');
+		}
 	}
 
 	return (r);

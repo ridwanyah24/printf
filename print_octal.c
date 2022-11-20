@@ -15,12 +15,15 @@ int print_octal(va_list list)
 	if (num == 0)
 	{
 		_putchar('0');
+		return (1);
 	}
-	for (s = 0; s != 0; s++)
+
+	for (s = 0; num != 0; s++)
 	{
 		oct[s] = num % 8;
 		num /= 8;
 	}
+
 	for (i = s - 1; i >= 0; i--)
 		_putchar(oct[i] + '0');
 

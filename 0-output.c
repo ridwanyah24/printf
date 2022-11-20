@@ -23,6 +23,9 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
+			if (format[i + 1] == '\0')
+				return (-1);
+
 			list_func = get_func(format, i + 1);
 
 			if (list_func == NULL)
