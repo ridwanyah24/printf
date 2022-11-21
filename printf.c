@@ -1,45 +1,22 @@
 #include "main.h"
+#include <stdarg.h>
 /**
-  *_printf- prints out data
-  *@format: the string format specifier
-  *Return: integer
+  *_printf - prints out data with formatted output
+  *
+  *@format: the string containing the format
+  *Return: Number of characters to print
   */
 int _printf(const char *format, ...)
 {
 	va_list ap;
-	int i = 0, j = 0;
-	int (*fn_pnt)(va_list);
+	int counter = 0;
 
-	if (format == NULL || (format[i] == '%' && format[i + 1] == '\0'))
+	if (format == NULL)
 		return (-1);
-	if (!format[i])
-		return (0);
 	va_start(ap, format);
-	for (i = 0; format[i] != '\0'; i++)
-	{
-		if (format[i] == '%')
-		{
-			if (format[i + 1] == '\0')
-			{
-				return (-1);
-			}
-			fn_pnt = get_func(format, i + 1);
-			if (fn_pnt == NULL)
-			{
-				_putchar('%');
-				j++;
-			} else
-			{
-				j += fn_pnt(ap);
-				i++;
-			}
-		}
-		else
-		{
-			_putchar(format[i]);
-			j++;
+	counter = print_format(format, ap);
+	_putchar(-1);
+	va_end(ap);
 
-		}
-	}
-	return (j);
+	return (counter);
 }
