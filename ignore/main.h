@@ -34,5 +34,10 @@ int print_int(va_list);
 int print_percent(va_list);
 int print_address(va_list);
 int print_HEXALL(long int, unsigned int, unsigned int);
+<<<<<<< HEAD:ignore_for_now/main.h
+=======
+int print_unsigned_dec(va_list);
+int print_STRING(va_list);
+>>>>>>> 06077f7fad93e35a416f50ecff3f598800297b2a:main.h
 
 #endif
