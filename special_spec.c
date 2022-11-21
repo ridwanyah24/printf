@@ -1,73 +1,73 @@
 #include "main.h"
-/**
-  *_isalpha - checks if a char is alpha
-  *@c: the char
-  *
-  *Return: 1 if alpha, else 0
-  */
-int _isalpha(char c)
-{
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
-		return (1);
-	return (0);
-}
+
+unsigned int _memcpy(buffer_t *output, const char *src, unsigned int n);
+void free_buffer(buffer_t *output);
+buffer_t *init_buffer(void);
 
 /**
-  *rot13 - encodes a string using rot13
-  *@s: the given string
-  *@f: pointer to flag
-  *
-  *Return: char len printed
-  */
-int rot13(va_list s, flag *f)
+ * _memcpy - Copies n bytes from memory area src to
+ *           the buffer contained in a buffer_t struct.
+ * @output: A buffer_t struct.
+ * @src: A pointer to the memory area to copy.
+ * @n: The number of bytes to be copied.
+ *
+ * Return: The number of bytes copied.
+ */
+unsigned int _memcpy(buffer_t *output, const char *src, unsigned int n)
 {
-	int i , j, lenght = 0;
-	char *encode0 = "abcdefghijklmABCDEFGHIJKLMnopqrstuvwxyzNOPQRSTUVWXYZ";
-	char *encode1 = "nopqrstuvwxyzNOPQRSTUVWXYZabcdefghijklmABCDEFGHIJKLM";
-	char *str = va_arg(s, char *);
+	unsigned int index;
 
-	(void)f;
-	if(str == NULL)
+	for (index = 0; index < n; index++)
 	{
-		return (_puts("(null)"));
-	}
-	for (i = 0; str[i]; ++i)
-	{
-		if (_isalpha(str[i]))
+		*(output->buffer) = *(src + index);
+		(output->len)++;
+
+		if (output->len == 1024)
 		{
-			for (j = 0; encode0[j]; ++j)
-			{
-				if (str[i] == encode0[j])
-				{
-					lenght += _putchar(encode1[j]);
-					break;
-				}
-			}
+			write(1, output->start, output->len);
+			output->buffer = output->start;
+			output->len = 0;
 		}
+
 		else
-			lenght += _putchar(str[i]);
+			(output->buffer)++;
 	}
-	return (lenght);
+
+	return (n);
 }
 
 /**
-  *rev_string - reverse a given string
-  *@str: the string to be reversed
-  *@f: pointer to flag
-  *
-  *Return: len of chars printed
-  */
-int rev_string(va_list str, flag *f)
+ * free_buffer - Frees a buffer_t struct.
+ * @output: The buffer_t struct to be freed.
+ */
+void free_buffer(buffer_t *output)
 {
-	char *s = va_arg(str, char *);
-	int i = 0, j;
+	free(output->start);
+	free(output);
+}
 
-	(void)f;
-	if (s == NULL)
-		s = "(null)";
-	while (s[i])
-		i++;
-	for (j = i - 1; j >= 0; --j)
-		_putchar(s[j]);
-	return (i);
+/**
+ * init_buffer - Initializes a variable of struct type buffer_t.
+ *
+ * Return: A pointer to the initialized buffer_t.
+ */
+buffer_t *init_buffer(void)
+{
+	buffer_t *output;
+
+	output = malloc(sizeof(buffer_t));
+	if (output == NULL)
+		return (NULL);
+
+	output->buffer = malloc(sizeof(char) * 1024);
+	if (output->buffer == NULL)
+	{
+		free(output);
+		return (NULL);
+	}
+
+	output->start = output->buffer;
+	output->len = 0;
+
+	return (output);
 }

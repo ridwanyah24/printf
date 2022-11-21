@@ -1,86 +1,82 @@
 #include "main.h"
+
+unsigned int convert_x(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+unsigned int convert_X(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len);
+
 /**
-  *print_unsign -prints an unsigned int in octal format
-  *@num: the given unsigned int
-  *@f: the flag
-  *@base: number base
-  *@lowercase: checks if lowercase hexadecimal
-  *
-  *Return: the lenght of the chars printed
-  */
-int print_unsign(va_list num, flag *f, int base, int lowercase)
+ * convert_x - Converts an unsigned int argument to hex using abcdef
+ *             and stores it to a buffer contained in a struct.
+ * @args: A va_list pointing to the argument to be converted.
+ * @flags: Flag modifiers.
+ * @wid: A width modifier.
+ * @prec: A precision modifier.
+ * @len: A length modifier.
+ * @output: A buffer_t struct containing a character array.
+ *
+ * Return: The number of bytes stored to the buffer.
+ */
+unsigned int convert_x(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len)
 {
-	unsigned long int n = va_arg(num, unsigned long int);
-	char *s;
+	unsigned long int num;
+	unsigned int ret = 0;
+	char *lead = "0x";
 
-	s = convert(n, base, lowercase);
-	if (n > 0)
-	{
-		if (f->hash)
-		{
-			if (base == 8)
-				s = str_concat("0", s);
-			if (base == 16)
-			{
-				if (lowercase)
-					s = str_concat("0x", s);
-				else
-					s = str_concat("0X", s);
-			}
-		}
-	}
-	if (f->precision != -1)
-		s = print_precision(s, f, 0);
-	else if (f->width)
-		s = print_width(s, f);
+	if (len == LONG)
+		num = va_arg(args, unsigned long int);
+	else
+		num = va_arg(args, unsigned int);
+	if (len == SHORT)
+		num = (unsigned short)num;
 
-	return (_puts(s));
+	if (HASH_FLAG == 1 && num != 0)
+		ret += _memcpy(output, lead, 2);
+
+	if (!(num == 0 && prec == 0))
+		ret += convert_ubase(output, num, "0123456789abcdef",
+				flags, wid, prec);
+
+	ret += print_neg_width(output, ret, flags, wid);
+
+	return (ret);
 }
 
 /**
- * print_o - prints an unsigned int in octal format
- * @num: given unsigned int
- * @f: pointer to the given
+ * convert_X - Converts an unsigned int argument to hex using ABCDEF
+ *             and stores it to a buffer contained in a struct.
+ * @args: A va_list pointing to the argument to be converted.
+ * @flags: Flag modifiers.
+ * @wid: A width modifier.
+ * @prec: A precision modifier.
+ * @len: A length modifier.
+ * @output: A buffer_t struct containing a character array.
  *
- * Return: the length of the characters printed
+ * Return: The number of bytes stored to the buffer.
  */
-int print_o(va_list num, flag *f)
+unsigned int convert_X(va_list args, buffer_t *output,
+		unsigned char flags, int wid, int prec, unsigned char len)
 {
-	return (print_unsign(num, f, 8, 0));
-}
+	unsigned long int num;
+	unsigned int ret = 0;
+	char *lead = "0X";
 
-/**
- * print_u - prints an unsigned integer
- * @integer: given unsigned int
- * @f: pointer to the given
- *
- * Return: the length of the characters printed
- */
-int print_u(va_list integer, flag *f)
-{
-	return (print_unsign(integer, f, 10, 0));
-}
+	if (len == LONG)
+		num = va_arg(args, unsigned long);
+	else
+		num = va_arg(args, unsigned int);
+	if (len == SHORT)
+		num = (unsigned short)num;
 
-/**
- * print_x - prints an unsigned int in octal format
- * @num: given unsigned int
- * @f: pointer to the given
- *
- * Return: the length of the characters printed
- */
-int print_x(va_list num, flag *f)
-{
-	return (print_unsign(num, f, 16, 1));
-}
+	if (HASH_FLAG == 1 && num != 0)
+		ret += _memcpy(output, lead, 2);
 
-/**
- * print_X - prints an unsigned int in octal format
- * @num: given unsigned int
- * @f: pointer to the given
- *
- * Return: the length of the characters printed
- */
-int print_X(va_list num, flag *f)
-{
-	return (print_unsign(num, f, 16, 0));
+	if (!(num == 0 && prec == 0))
+		ret += convert_ubase(output, num, "0123456789ABCDEF",
+				flags, wid, prec);
+
+	ret += print_neg_width(output, ret, flags, wid);
+
+	return (ret);
 }

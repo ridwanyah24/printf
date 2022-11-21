@@ -1,73 +1,84 @@
 #include "main.h"
 
-/**
-  *sort_flags - enforce the preference of the flags
-  *@f: flags
-  *
-  */
-void sort_flags(flag *f)
-{
-	if (f->plus)
-		f->space = 0;
-	if (f->minus || (f->precision != -1))
-		f->zero = 0;
-}
-/**
-  *check_width - checks for width spec
-  *@c: the char
-  *@spec: the width spec
-  *@f: the pointer to flag
-  *
-  *Return: 1 if width spec, 0 if not
-  */
-int check_width(char c, va_list spec, flag *f)
-{
-	int i = 0;
+unsigned int print_width(buffer_t *output, unsigned int printed,
+		unsigned char flags, int wid);
+unsigned int print_string_width(buffer_t *output,
+		unsigned char flags, int wid, int prec, int size);
+unsigned int print_neg_width(buffer_t *output, unsigned int printed,
+		unsigned char flags, int wid);
 
-	if (c == '0')
+/**
+ * print_width - Stores leading spaces to a buffer for a width modifier.
+ * @output: A buffer_t struct containing a character array.
+ * @printed: The current number of characters already printed to output
+ *           for a given number specifier.
+ * @flags: Flag modifiers.
+ * @wid: A width modifier.
+ *
+ * Return: The number of bytes stored to the buffer.
+ */
+unsigned int print_width(buffer_t *output, unsigned int printed,
+		unsigned char flags, int wid)
+{
+	unsigned int ret = 0;
+	char width = ' ';
+
+	if (NEG_FLAG == 0)
 	{
-		if (!f->width)
-		{
-			f->zero = 1;
-			i = 1;
-		}
-		else
-		{
-			f->width = f->width * 10 + (c - '0');
-			i = 1;
-		}
+		for (wid -= printed; wid > 0;)
+			ret += _memcpy(output, &width, 1);
 	}
-	else if (c == '*')
-	{
-		f->width = va_arg(spec, int);
-		i = 1;
-	}
-	return (i);
+
+	return (ret);
 }
 
 /**
-  *validate_precision - checks for precision specifier
-  *@ch: the given char
-  *@spec: the specifier
-  *@f: the pointer to the flag
-  *Return: 1 if set 0 if not
-  */
-int validate_precision(char ch, va_list spec, flag *f)
+ * print_string_width - Stores leading spaces to a buffer for a width modifier.
+ * @output: A buffer_t struct containing a character array.
+ * @flags: Flag modifiers.
+ * @wid: A width modifier.
+ * @prec: A precision modifier.
+ * @size: The size of the string.
+ *
+ * Return: The number of bytes stored to the buffer.
+ */
+unsigned int print_string_width(buffer_t *output,
+		unsigned char flags, int wid, int prec, int size)
 {
-	if (ch == '.')
+	unsigned int ret = 0;
+	char width = ' ';
+
+	if (NEG_FLAG == 0)
 	{
-		f->precision = 0;
-		return (1);
+		wid -= (prec == -1) ? size : prec;
+		for (; wid > 0; wid--)
+			ret += _memcpy(output, &width, 1);
 	}
-	if (_isdigit(ch))
+
+	return (ret);
+}
+
+/**
+ * print_neg_width - Stores trailing spaces to a buffer for a '-' flag.
+ * @output: A buffer_t struct containing a character array.
+ * @printed: The current number of bytes already stored to output
+ *           for a given specifier.
+ * @flags: Flag modifiers.
+ * @wid: A width modifier.
+ *
+ * Return: The number of bytes stored to the buffer.
+ */
+unsigned int print_neg_width(buffer_t *output, unsigned int printed,
+		unsigned char flags, int wid)
+{
+	unsigned int ret = 0;
+	char width = ' ';
+
+	if (NEG_FLAG == 1)
 	{
-		f->precision = f->precision * 10 + (ch - '0');
-		return (1);
+		for (wid -= printed; wid > 0; wid--)
+			ret += _memcpy(output, &width, 1);
 	}
-	if (ch == '*')
-	{
-		f->precision = va_arg(spec, int);
-		return (1);
-	}
-	return (0);
+
+	return (ret);
 }
